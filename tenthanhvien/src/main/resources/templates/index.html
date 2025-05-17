@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nhóm Tàu Khựa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 40px 60px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      font-size: 26px;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    .info {
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    .info p {
+      margin: 8px 0;
+      font-size: 16px;
+      color: #34495e;
+      transition: color 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .info p::before {
+      content: "👤 ";
+    }
+
+    .info p:hover {
+      color: #2980b9;
+      transform: translateX(8px) scale(1.05);
+    }
+
+    .class {
+      margin-top: 20px;
+      font-weight: 600;
+      color: #2980b9;
+    }
+
+    /* Thêm style cho thông tin hiển thị */
+    #user-details {
+      margin-top: 20px;
+      text-align: left;
+      background: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+      color: #2c3e50;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>NHÓM TÀU KHỰA</h1>
+  <div class="info" id="user-list">
+    <!-- Thêm data-id tương ứng với user id trong DB -->
+    <p data-id="1">Nguyễn Hữu Luật</p>
+    <p data-id="2">Phan Thái Sang</p>
+    <p data-id="3">Nguyễn Nghĩa Trung</p>
+    <p data-id="4">Hoàng Ngọc Tú</p>
+  </div>
+
+  <!-- Nơi hiển thị thông tin người dùng khi click -->
+  <div id="user-details"></div>
+
+  <p class="class">Lớp: ST22B</p>
+</div>
+
+<script>
+  document.getElementById('user-list').addEventListener('click', function(event) {
+    const p = event.target;
+    if (!p.hasAttribute('data-id')) return;
+
+    const userId = p.getAttribute('data-id');
+
+    fetch(`/api/users/${userId}`)
+            .then(response => {
+              if (!response.ok) throw new Error('Không tìm thấy thông tin người dùng');
+              return response.json();
+            })
+            .then(user => {
+              const userDetailsDiv = document.getElementById('user-details');
+              userDetailsDiv.innerHTML = `
+            <h3>Thông tin người dùng</h3>
+            <p><strong>Tên:</strong> ${user.name}</p>
+            <p><strong>Email:</strong> ${user.email || 'Chưa cập nhật'}</p>
+            <p><strong>Điện thoại:</strong> ${user.phone || 'Chưa cập nhật'}</p>
+          `;
+            })
+            .catch(error => {
+              document.getElementById('user-details').innerHTML = `<p style="color:red;">${error.message}</p>`;
+            });
+  });
+</script>
+</body>
+</html>
