@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Company Form</title></head>
+<body>
+<h2 th:text="${company.id == null} ? 'Add Company' : 'Edit Company'">Company Form</h2>
+
+<form th:action="@{/companies}" th:object="${company}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+    <label>Name: <input type="text" th:field="*{name}" required/></label><br><br>
+    <button type="submit">Save</button>
+    <a th:href="@{/companies}">Cancel</a>
+</form>
+</body>
+</html>
