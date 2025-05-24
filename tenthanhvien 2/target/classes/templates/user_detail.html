@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Chi tiết người dùng</title></head>
+<body>
+<h2>Chi tiết người dùng</h2>
+<p><strong>ID:</strong> <span th:text="${user.id}"></span></p>
+<p><strong>Tên:</strong> <span th:text="${user.name}"></span></p>
+<p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+<a href="/users">← Quay lại danh sách</a>
+</body>
+</html>

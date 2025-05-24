@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nhóm Tàu Khựa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 450px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      font-size: 26px;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .info {
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    .info p {
+      margin: 8px 0;
+      font-size: 16px;
+      color: #34495e;
+      transition: color 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .info p::before {
+      content: "👤 ";
+    }
+
+    .info p:hover {
+      color: #2980b9;
+      transform: translateX(8px) scale(1.05);
+    }
+
+    .class {
+      margin-top: 20px;
+      font-weight: 600;
+      color: #2980b9;
+      text-align: center;
+    }
+
+    #user-details {
+      margin-top: 20px;
+      background: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+      color: #2c3e50;
+      font-size: 15px;
+    }
+
+    form {
+      margin-top: 30px;
+      padding-top: 15px;
+      border-top: 1px solid #ccc;
+    }
+
+    form input {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    form button {
+      width: 100%;
+      padding: 10px;
+      background: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    form button:hover {
+      background: #1f5f8a;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>NHÓM TÀU KHỰA</h1>
+  <div class="info" id="user-list"></div>
+
+  <div id="user-details"></div>
+
+  <p class="class">Lớp: ST22B</p>
+
+  <form id="add-user-form">
+    <h3>Thêm người dùng mới</h3>
+    <input type="text" name="name" placeholder="Tên" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="text" name="phone" placeholder="Số điện thoại" />
+    <button type="submit">Thêm</button>
+  </form>
+</div>
+
+<script>
+  const userListDiv = document.getElementById('user-list');
+  const userDetailsDiv = document.getElementById('user-details');
+  const form = document.getElementById('add-user-form');
+
+  function loadUsers() {
+    fetch('/api/users')
+            .then(res => res.json())
+            .then(users => {
+              userListDiv.innerHTML = '';
+              users.forEach(user => {
+                const p = document.createElement('p');
+                p.textContent = user.name;
+                p.setAttribute('data-id', user.id);
+                p.addEventListener('click', () => showUser(user.id));
+                userListDiv.appendChild(p);
+              });
+            });
+  }
+
+  function showUser(id) {
+    fetch(`/api/users/${id}`)
+            .then(res => res.json())
+            .then(user => {
+              userDetailsDiv.innerHTML = `
+          <h3>Thông tin người dùng</h3>
+          <p><strong>Tên:</strong> ${user.name}</p>
+          <p><strong>Email:</strong> ${user.email || 'Chưa cập nhật'}</p>
+          <p><strong>Điện thoại:</strong> ${user.phone || 'Chưa cập nhật'}</p>
+        `;
+            });
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+            .then(res => {
+              if (!res.ok) throw new Error('Không thể thêm người dùng');
+              return res.json();
+            })
+            .then(() => {
+              form.reset();
+              loadUsers();
+              userDetailsDiv.innerHTML = '';
+            })
+            .catch(err => alert(err.message));
+  });
+
+  // Load initial users
+  loadUsers();
+</script>
+</body>
+</html>
