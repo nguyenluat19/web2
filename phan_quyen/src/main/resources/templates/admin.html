@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Admin Page</title>
+</head>
+<body>
+<h1>Danh sách User</h1>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Username</th>
+<!--    <th>Roles</th>-->
+<!--    <th>Enabled</th>-->
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="u : ${users}">
+    <td th:text="${u.id}"></td>
+    <td th:text="${u.username}"></td>
+<!--    <td th:text="${u.roles}"></td>-->
+<!--    <td th:text="${u.enabled}"></td>-->
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

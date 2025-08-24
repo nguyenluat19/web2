@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>User</title></head>
+<body>
+<h2>Trang USER </h2>
+<p th:text="'User hiện tại: ' + ${user.username}"></p>
+<p><a th:href="@{/}">Về trang chủ</a></p>
+</body>
+</html>

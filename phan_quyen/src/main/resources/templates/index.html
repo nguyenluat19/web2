@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Home</title></head>
+<body>
+<h2>Trang chủ</h2>
+<p th:if="${user != null}">Xin chào, <b th:text="${user.username}"></b>!</p>
+<p th:if="${user == null}">Bạn chưa đăng nhập.</p>
+<p>
+  <a th:href="@{/user}">Trang User</a> |
+  <a th:href="@{/admin}">Trang Admin</a> |
+  <a th:href="@{/login}">Login</a>
+</p>
+<form th:if="${user != null}" th:action="@{/logout}" method="post">
+  <button type="submit">Logout</button>
+</form>
+</body>
+</html>
