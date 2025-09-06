@@ -1,5 +1,5 @@
 package com.usercompany.usercompany.controller;
-
+// luat
 import com.usercompany.usercompany.model.Company;
 import com.usercompany.usercompany.service.CompanyService;
 import org.springframework.web.bind.annotation.*;
@@ -41,3 +41,4 @@ public class CompanyController {
         companyService.delete(id);
     }
 }
+
